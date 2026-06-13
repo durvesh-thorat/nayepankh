@@ -3,65 +3,72 @@ from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
-from .database import get_db
-from .models import Volunteer, Admin
+from api.database import get_db
+from api.models import Volunteer, Admin
+from api.schemas import TokenData
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/volunteer/login")
+security = HTTPBearer()
 
-SECRET_KEY = os.getenv("JWT_SECRET", "default_secret_key_needs_to_be_replaced_in_production")
+JWT_SECRET = os.getenv("JWT_SECRET", "fallback-secret-for-dev")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_DAYS = 7
+ACCESS_TOKEN_EXPIRE = timedelta(days=7)
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+def hash_password(plain: str) -> str:
+    return pwd_context.hash(plain)
 
-def get_password_hash(password):
-    return pwd_context.hash(password)
+def verify_password(plain: str, hashed: str) -> bool:
+    return pwd_context.verify(plain, hashed)
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
+def create_access_token(data: dict) -> str:
     to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.now(timezone.utc) + expires_delta
-    else:
-        expire = datetime.now(timezone.utc) + timedelta(days=ACCESS_TOKEN_EXPIRE_DAYS)
+    expire = datetime.now(timezone.utc) + ACCESS_TOKEN_EXPIRE
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    return jwt.encode(to_encode, JWT_SECRET, algorithm=ALGORITHM)
 
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
+def decode_token(token: str) -> TokenData:
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        role: str = payload.get("role")
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[ALGORITHM])
+        email = payload.get("sub")
+        role = payload.get("role")
         if email is None or role is None:
-            raise credentials_exception
+            raise ValueError("Token missing fields")
+        return TokenData(email=email, role=role)
     except JWTError:
-        raise credentials_exception
-    
-    return {"email": email, "role": role}
+        raise ValueError("Invalid token")
 
-def get_current_volunteer(user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
-    if user["role"] != "volunteer":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized")
-    volunteer = db.query(Volunteer).filter(Volunteer.email == user["email"]).first()
-    if volunteer is None:
+def get_current_volunteer(credentials: HTTPAuthorizationCredentials = Depends(security), db: Session = Depends(get_db)):
+    token = credentials.credentials
+    try:
+        token_data = decode_token(token)
+    except ValueError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
+    
+    if token_data.role != "volunteer":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a volunteer")
+    
+    volunteer = db.query(Volunteer).filter(Volunteer.email == token_data.email).first()
+    if not volunteer:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
     if not volunteer.is_active:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="User is inactive")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User deactivated")
+        
     return volunteer
 
-def get_current_admin(user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
-    if user["role"] != "admin":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized as admin")
-    admin = db.query(Admin).filter(Admin.email == user["email"]).first()
-    if admin is None:
+def get_current_admin(credentials: HTTPAuthorizationCredentials = Depends(security), db: Session = Depends(get_db)):
+    token = credentials.credentials
+    try:
+        token_data = decode_token(token)
+    except ValueError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
+    
+    if token_data.role != "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an admin")
+    
+    admin = db.query(Admin).filter(Admin.email == token_data.email).first()
+    if not admin:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Admin not found")
+        
     return admin

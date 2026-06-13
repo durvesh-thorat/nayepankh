@@ -1,10 +1,7 @@
-from pydantic import BaseModel, EmailStr, Field
-from typing import Optional, List, Dict, Any
+from pydantic import BaseModel, ConfigDict, EmailStr
+from typing import Optional, List, Dict
 from datetime import datetime
-from uuid import UUID
-from .models import CampaignType, AssignmentStatus
 
-# Volunteer
 class VolunteerBase(BaseModel):
     full_name: str
     email: EmailStr
@@ -13,97 +10,102 @@ class VolunteerBase(BaseModel):
     skills: Optional[str] = None
     availability: Optional[str] = None
 
-class VolunteerCreate(VolunteerBase):
+class VolunteerRegister(VolunteerBase):
     password: str
+
+class VolunteerLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+class VolunteerOut(VolunteerBase):
+    id: str
+    is_active: bool
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
 
 class VolunteerUpdate(BaseModel):
     full_name: Optional[str] = None
+    email: Optional[EmailStr] = None
     phone: Optional[str] = None
     city: Optional[str] = None
     skills: Optional[str] = None
     availability: Optional[str] = None
 
-class VolunteerResponse(VolunteerBase):
-    id: UUID
-    is_active: bool
-    created_at: datetime
-
-    class Config:
-        from_attributes = True
-
-# Campaign
 class CampaignBase(BaseModel):
     title: str
-    campaign_type: CampaignType
+    campaign_type: str
     description: Optional[str] = None
     city: Optional[str] = None
-    date: datetime
-    slots_total: int
+    date: Optional[datetime] = None
+    slots_total: Optional[int] = 0
 
 class CampaignCreate(CampaignBase):
     pass
 
 class CampaignUpdate(BaseModel):
     title: Optional[str] = None
-    campaign_type: Optional[CampaignType] = None
+    campaign_type: Optional[str] = None
     description: Optional[str] = None
     city: Optional[str] = None
     date: Optional[datetime] = None
     slots_total: Optional[int] = None
+    slots_filled: Optional[int] = None
     is_active: Optional[bool] = None
 
-class CampaignResponse(CampaignBase):
-    id: UUID
+class CampaignOut(CampaignBase):
+    id: str
     slots_filled: int
     is_active: bool
     created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        from_attributes = True
-
-# Assignment
-class AssignmentBase(BaseModel):
-    status: AssignmentStatus
-
-class AssignmentResponse(AssignmentBase):
-    id: UUID
-    volunteer_id: UUID
-    campaign_id: UUID
+class AssignmentOut(BaseModel):
+    id: str
+    volunteer_id: str
+    campaign_id: str
+    status: str
     assigned_at: datetime
+    campaign: CampaignOut
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        from_attributes = True
+class VolunteerWithAssignmentsOut(VolunteerOut):
+    assignments: List[AssignmentOut] = []
+    model_config = ConfigDict(from_attributes=True)
 
-class CampaignInAssignment(CampaignResponse):
-    pass
-
-class AssignmentWithCampaignResponse(AssignmentResponse):
-    campaign: CampaignInAssignment
-
-class VolunteerWithAssignmentsResponse(VolunteerResponse):
-    assignments: List[AssignmentWithCampaignResponse] = []
-
-# Admin
-class AdminCreate(BaseModel):
+class AdminSetup(BaseModel):
     email: EmailStr
     password: str
 
-class AdminSetup(AdminCreate):
-    setup_key: Optional[str] = None
+class AdminLogin(BaseModel):
+    email: EmailStr
+    password: str
 
-# Auth
+class AdminOut(BaseModel):
+    id: str
+    email: str
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
 class Token(BaseModel):
     access_token: str
     token_type: str
+    role: str
 
-class LoginRequest(BaseModel):
-    email: EmailStr
-    password: str
+class TokenData(BaseModel):
+    email: str
+    role: str
 
-class VolunteerAuthResponse(BaseModel):
-    access_token: str
-    volunteer: VolunteerResponse
+class AssignmentStatusUpdate(BaseModel):
+    status: str
 
-class AdminAuthResponse(BaseModel):
-    access_token: str
-    role: str = "admin"
+class CityCount(BaseModel):
+    city: str
+    count: int
+
+class SummaryReport(BaseModel):
+    total_volunteers: int
+    active_campaigns: int
+    total_assignments: int
+    assignments_by_type: Dict[str, int]
+    top_cities: List[CityCount]
+    recent_registrations: List[VolunteerOut]

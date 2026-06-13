@@ -24,6 +24,10 @@ app.include_router(volunteers.router, prefix="/api")
 app.include_router(campaigns.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
 
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to NayePankh Foundation API. Endpoints are at /api"}
+
 @app.get("/api/health")
 def health():
     return {"status": "ok", "project": "NayePankh"}

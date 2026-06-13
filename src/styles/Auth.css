@@ -1,0 +1,243 @@
+/* /src/styles/Auth.css */
+
+.auth-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-surface);
+}
+
+/* Split Layout */
+.auth-left {
+  width: 40%;
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.auth-logo img {
+  height: 40px;
+  filter: brightness(0) invert(1);
+}
+
+.auth-quote-wrap {
+  margin-top: auto;
+  margin-bottom: 64px;
+}
+
+.auth-quote {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  line-height: 1.3;
+  margin-bottom: 24px;
+}
+
+.auth-author {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.auth-stat {
+  padding-top: 48px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.auth-stat strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: var(--color-secondary);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.auth-stat span {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.auth-right {
+  width: 60%;
+  padding: 48px 8vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.auth-header {
+  margin-bottom: 40px;
+}
+
+.auth-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+}
+
+.auth-header p {
+  color: var(--color-text-secondary);
+  font-size: 1.05rem;
+}
+
+.auth-link-text {
+  margin-top: 32px;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.auth-link-text a {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.auth-link-text a:hover {
+  text-decoration: underline;
+}
+
+/* Form specifics */
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.password-input-wrap {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Skills Pills */
+.skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skill-pill {
+  padding: 8px 16px;
+  border-radius: 9999px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.skill-pill.selected {
+  background-color: rgba(13, 115, 119, 0.1);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+/* Radio Group */
+.radio-group {
+  display: flex;
+  gap: 24px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.radio-label input {
+  margin: 0;
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 16px;
+  font-size: 1.1rem;
+  margin-top: 16px;
+}
+
+/* Admin Login Layout */
+.admin-login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary);
+  padding: 24px;
+}
+
+.admin-login-card {
+  background-color: var(--color-surface);
+  border-radius: 16px;
+  padding: 48px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.admin-logo-wrap {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.admin-logo-wrap img {
+  height: 48px;
+}
+
+.admin-title {
+  text-align: center;
+  font-size: 1.75rem;
+  margin-bottom: 40px;
+}
+
+.admin-footer-link {
+  display: block;
+  text-align: center;
+  margin-top: 32px;
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  transition: color 0.15s ease;
+}
+
+.admin-footer-link:hover {
+  color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .auth-page {
+    flex-direction: column;
+  }
+  .auth-left {
+    width: 100%;
+    padding: 32px 24px;
+    display: none; /* Hide on mobile to save space */
+  }
+  .auth-right {
+    width: 100%;
+    padding: 32px 24px;
+  }
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}

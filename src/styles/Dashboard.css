@@ -1,0 +1,207 @@
+/* /src/styles/Dashboard.css */
+
+.dashboard-page {
+  min-height: 100vh;
+  background-color: var(--color-bg);
+}
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.dashboard-header {
+  margin-bottom: 48px;
+}
+
+.dashboard-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.dashboard-header p {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+}
+
+/* Stats Row */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 64px;
+}
+
+.stat-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: 32px;
+  border-left: 4px solid var(--color-primary);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+}
+
+.stat-card:nth-child(2) {
+  border-left-color: var(--color-success);
+}
+
+.stat-card:nth-child(3) {
+  border-left-color: var(--color-secondary);
+}
+
+.stat-value {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 8px;
+  color: var(--color-text-primary);
+}
+
+.stat-label {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Section specifics */
+.dashboard-section {
+  margin-bottom: 64px;
+}
+
+.dashboard-section-header {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard-section-title {
+  font-size: 1.75rem;
+}
+
+/* Data Table */
+.data-table-wrap {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.data-table th, 
+.data-table td {
+  padding: 16px 24px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.data-table th {
+  background-color: rgba(0,0,0,0.02);
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.data-table tbody tr:hover {
+  background-color: rgba(0,0,0,0.01);
+}
+
+.empty-state {
+  padding: 64px 24px;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+/* Campaign Details Page */
+.cd-hero {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 64px 0 48px;
+}
+
+.cd-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.cd-title {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  margin: 16px 0;
+}
+
+.cd-meta {
+  display: flex;
+  gap: 16px;
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+}
+
+.cd-content-split {
+  display: flex;
+  gap: 6vw;
+  padding: 64px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cd-main {
+  width: 60%;
+}
+
+.cd-sidebar {
+  width: 40%;
+}
+
+.join-box {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: 4px solid var(--color-secondary);
+  padding: 32px;
+  border-radius: 8px;
+  position: sticky;
+  top: 100px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+}
+
+.join-box-title {
+  font-size: 1.25rem;
+  margin-bottom: 24px;
+}
+
+.join-progress {
+  margin-bottom: 32px;
+}
+
+@media (max-width: 900px) {
+  .cd-content-split {
+    flex-direction: column;
+  }
+  .cd-main, .cd-sidebar {
+    width: 100%;
+  }
+  .join-box {
+    position: static;
+  }
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+}

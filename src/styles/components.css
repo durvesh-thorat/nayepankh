@@ -1,0 +1,238 @@
+/* /src/styles/components.css */
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  width: 100%;
+}
+
+.custom-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(13, 115, 119, 0.1);
+  border-left-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Navbar specific */
+.navbar {
+  position: sticky;
+  top: 0;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  z-index: 100;
+}
+
+.navbar-top-line {
+  height: 3px;
+  background-color: var(--color-secondary);
+  width: 100%;
+}
+
+.navbar-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-brand img {
+  height: 48px;
+  object-fit: contain;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.navbar-link {
+  font-weight: 500;
+  color: var(--color-text-primary);
+  transition: color 0.15s ease;
+}
+
+.navbar-link:hover {
+  color: var(--color-primary);
+}
+
+/* Footer specific */
+.footer {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  padding: 64px 24px 24px;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+.footer-brand img {
+  height: 48px;
+  filter: brightness(0) invert(1);
+  margin-bottom: 16px;
+}
+
+.footer-brand p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  max-width: 300px;
+}
+
+.footer h4 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  margin-bottom: 24px;
+  font-weight: 600;
+}
+
+.footer-links {
+  list-style: none;
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.8);
+  transition: color 0.15s ease;
+}
+
+.footer-links a:hover {
+  color: var(--color-surface);
+}
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Campaign Card (List Item style for public page) */
+.campaign-list-item {
+  display: flex;
+  background-color: var(--color-surface);
+  margin-bottom: 24px;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  align-items: stretch;
+}
+
+.campaign-list-item:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+.campaign-image {
+  width: 45%;
+  position: relative;
+  min-height: 300px;
+}
+
+.campaign-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.campaign-content {
+  width: 55%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.campaign-content .badge {
+  margin-bottom: 16px;
+}
+
+.campaign-title {
+  font-size: 1.75rem;
+  margin-bottom: 12px;
+}
+
+.campaign-meta {
+  display: flex;
+  gap: 16px;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.campaign-description {
+  color: var(--color-text-secondary);
+  margin-bottom: 24px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.campaign-progress-wrap {
+  margin-bottom: 24px;
+}
+
+.campaign-progress-text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.campaign-progress-bar {
+  height: 4px;
+  background-color: var(--color-bg);
+  border-radius: 2px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.campaign-progress-fill {
+  height: 100%;
+  background-color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .campaign-list-item {
+    flex-direction: column !important;
+  }
+  .campaign-image {
+    width: 100%;
+    min-height: 200px;
+  }
+  .campaign-content {
+    width: 100%;
+    padding: 24px;
+  }
+}

@@ -4,7 +4,11 @@ from mangum import Mangum
 from api.routers import volunteers, campaigns, admin
 from api.database import engine, Base
 
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"Database connection failed on startup: {e}")
+    print("If you are on Vercel using Supabase, ensure you use the IPv4 Connection Pooling URL.")
 
 app = FastAPI(title="NayePankh Foundation API")
 

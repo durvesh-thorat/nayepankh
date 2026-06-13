@@ -1,3 +1,9 @@
+import os
+import sys
+
+# Add project root to sys.path so 'api.' imports work in Vercel
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.routers import volunteers, campaigns, admin

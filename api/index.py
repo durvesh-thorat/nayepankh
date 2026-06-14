@@ -6,10 +6,10 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.routers.volunteers import router as volunteers_router
-from api.routers.campaigns import router as campaigns_router
-from api.routers.admin import router as admin_router
-from api.database import engine, Base
+from backend.routers.volunteers import router as volunteers_router
+from backend.routers.campaigns import router as campaigns_router
+from backend.routers.admin import router as admin_router
+from backend.database import engine, Base
 
 # try:
 #     Base.metadata.create_all(bind=engine)
@@ -38,8 +38,8 @@ def read_root():
 @app.get("/api/init-db")
 def init_db():
     try:
-        from api.models import Base
-        from api.database import engine
+        from backend.models import Base
+        from backend.database import engine
         Base.metadata.create_all(bind=engine)
         return {"status": "success", "message": "Database tables created."}
     except Exception as e:
